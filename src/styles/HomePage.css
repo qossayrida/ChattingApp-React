@@ -1,0 +1,43 @@
+
+.chat-column {
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.contacts-column {
+    height: 100vh;
+    background-color: #1c214d;
+}
+
+.home-container h3 {
+    font-size: 2rem;
+    padding: 15px;
+    color: #ffffff;
+}
+
+/* Contact Prompt */
+.select-contact-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-style: italic;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 12px; /* Custom scrollbar width */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Track color matches chat column */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd; /* Scroll thumb in a neutral tone */
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; /* Slightly darker tone on hover */
+}

@@ -1,0 +1,28 @@
+/* Styles for the container of the contact list */
+.contact-list-container {
+    margin: 0 auto; /* Center the list container horizontally */
+    padding: 20px; /* Add padding around the list for better spacing */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add a subtle shadow for depth */
+    border-radius: 8px; /* Round corners of the container */
+    width: 90%; /* Make the width responsive, up to 90% of the viewport width */
+    max-width: 600px; /* Set a maximum width to ensure it doesn't get too wide on larger screens */
+    min-width: 300px; /* Ensure a minimum width for very small screens */
+    background-color: #ffffff; /* Ensures the background color is white */
+    display: flex; /* Use flexbox for alignment */
+    align-items: flex-start /* Center-align the items horizontally */
+}
+
+/* Styles for each contact item */
+.custom-contact-item {
+    margin-bottom: 10px; /* Adds a gap between each contact item */
+    cursor: pointer; /* Changes cursor to pointer on hover to indicate clickability */
+    padding: 10px 15px; /* Add padding for better touch targets and aesthetics */
+    border-radius: 5px; /* Optionally round corners of each contact item */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #ffffff; /* Set a default background color */
+    border: 1px solid #e0e0e0; /* Add a border for each contact item */
+    width: calc(100% - 30px); /* Subtract padding from the width to fit container */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+
