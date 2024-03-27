@@ -1,31 +1,27 @@
-/* Chat Container */
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Full height of the parent container */
+    height: 100%;
 }
 
-/* Message List */
 .message-list {
-    flex-grow: 1; /* Allows this element to fill the space and grow */
-    overflow-y: auto; /* Scrollable for overflow */
-    padding: 15px; /* Padding inside the message area */
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
 }
 
-/* Message Form */
+
 .message-form {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Align items vertically */
-    padding: 10px; /* Padding around the form */
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
 }
 
-/* Message Input */
 .message-input {
-    width: calc(100% - 90px); /* Take full width minus button and padding */
+    width: calc(100% - 90px);
 }
 
-/* Send Button */
 .send-button {
-    width: 80px; /* Fixed width for the send button */
+    width: 80px;
 }

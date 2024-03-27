@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage'; // Import your login component
+import HomePage from './pages/HomePage'; // Import your home page component
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+
     return (
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    {isLoggedIn ? (
+                        <Route path="/" element={<HomePage onLogout={handleLogout}/>}  />
+                    ) : (
+                        <Route
+                            path="/"
+                            element={<LoginPage onLogin={handleLogin} />}
+                        />
+                    )}
                 </Routes>
             </div>
         </Router>
@@ -16,3 +34,4 @@ function App() {
 }
 
 export default App;
+

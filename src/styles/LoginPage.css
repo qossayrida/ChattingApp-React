@@ -1,0 +1,24 @@
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.content {
+    text-align: center;
+    padding: 50px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.content label {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-right: 20px;
+}
+
+.send-button{
+    margin: 20px;
+}

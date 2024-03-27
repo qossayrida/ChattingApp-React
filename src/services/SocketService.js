@@ -1,30 +1,40 @@
-import io from "socket.io-client";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
-const SERVER = "http://localhost:8080"; // Your Spring Boot server URL
+
 let socket;
 
-export const connectSocket = () => {
-    socket = io(SERVER, { transports: ["websocket"] });
+export const initializeWebSocket = () => {
+    const socket = new SockJS('http://localhost:8088/ws');
+    const stompClient = Stomp.over(socket);
+    stompClient.debug = null;
 
-    socket.on("connect", () => {
-        console.log("Connected to WebSocket server!");
-    });
+    stompClient.connect({}, () => {
+        console.log('Connected to WebSocket');
+        this.setState({ stompClient, connected: true });
 
-    return socket;
-};
-
-export const disconnectSocket = () => {
-    if (socket) socket.disconnect();
-};
-
-export const subscribeToChat = (callback) => {
-    if (!socket) return;
-
-    socket.on("chatMessage", (message) => {
-        callback(message);
+        stompClient.subscribe('/user/public', (response) => {
+            const message = JSON.parse(response.body);
+            console.log('Received message from server:', message);
+        });
+    }, (error) => {
+        console.error('Error connecting to WebSocket:', error);
     });
 };
 
-export const sendMessage = (message) => {
-    if (socket) socket.emit("chatMessage", message);
+export const addUser = (user) => {
+    const { stompClient } = this.state;
+    if (stompClient && stompClient.connected) {
+        stompClient.send('/app/user.addUser', {}, JSON.stringify(user));
+    }
 };
+
+export const disconnectUser = (user) => {
+    const { stompClient } = this.state;
+    if (stompClient && stompClient.connected) {
+        stompClient.send('/app/user.disconnectUser', {}, JSON.stringify(user));
+    }
+};
+
+
+

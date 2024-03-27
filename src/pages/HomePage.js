@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import {Container, Row, Col, Button} from 'react-bootstrap';
 import ContactList from '../components/ContactList';
 import Chat from '../components/Chat';
-import '../styles/HomePage.css'; // Ensure this path is correct
+import '../styles/HomePage.css';
 
-const HomePage = () => {
+function HomePage({onLogout})  {
     const [selectedContact, setSelectedContact] = useState(null);
 
     const handleSelectContact = (contact) => {
         setSelectedContact(contact);
-        // You might also handle fetching the chat history for the selected contact here
     };
 
     return (
@@ -18,6 +17,7 @@ const HomePage = () => {
                 <Col xs={12} md={4} className="contacts-column"> {/* Add class here */}
                     <h3>Contacts</h3>
                     <ContactList onSelectContact={handleSelectContact} />
+                    <Button onClick={onLogout} className="logout-button">Logout</Button>
                 </Col>
                 <Col xs={12} md={8} className="chat-column"> {/* Add class here */}
                     {selectedContact ? (
