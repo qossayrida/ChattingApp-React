@@ -16,11 +16,16 @@ function HomePage({onLogout})  {
             setContactMessages({ ...contactMessages, [contact.name]: [] });
             serviceSocket.fetchChatHistory(nickName,contact.name)
                 .then(chatHistory => {
-                    console.log("This for debug --1-->",chatHistory)
+
+                    const updatedChatHistory = chatHistory.map(chat => ({
+                        ...chat,
+                        sent: chat.senderId === nickName
+                    }));
+
                     setContactMessages(prevMessages => {
                         return {
                             ...prevMessages,
-                            [contact.name]: chatHistory
+                            [contact.name]: updatedChatHistory
                         };
                     });
                 })
