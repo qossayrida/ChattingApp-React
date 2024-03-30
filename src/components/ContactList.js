@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState , useEffect} from 'react';
 import { ListGroup } from 'react-bootstrap';
 import '../styles/ContactList.css';
+import serviceSocket from '../services/SocketService';
 
-const contacts = [
-    { name: 'Qossay Rida' },
-    { name: 'Ali Ahmad' }
-];
+const ContactList = ({currentUser, onSelectContact }) => {
+    const [contacts, setContacts] = useState([]);
 
-const ContactList = ({ onSelectContact }) => {
+    useEffect(() => {
+        const loadActiveUsers = async () => {
+            const activeUsers = await serviceSocket.fetchActiveUsers();
+            const filteredUsers = activeUsers.filter(user => user.nickName !== currentUser);
+            setContacts(filteredUsers.map(user => ({ name: user.nickName })));
+        };
+
+        loadActiveUsers();
+    },);
+
     const theContacts = contacts.map((contact, index) => (
         <ListGroup.Item key={index} action onClick={() => onSelectContact(contact)} className="custom-contact-item">
             {contact.name}
@@ -15,7 +23,7 @@ const ContactList = ({ onSelectContact }) => {
     ))
 
     return (
-        <div className="contact-list-container"> {/* Add a wrapper div with a class */}
+        <div className="contact-list-container">
             <ListGroup className="custom-contact-list">
                 {theContacts}
             </ListGroup>

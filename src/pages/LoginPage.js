@@ -1,22 +1,36 @@
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
 import {Container, Button, Form} from 'react-bootstrap';
+import serviceSocket from '../services/SocketService';
 
 function LoginPage({onLogin}) {
-    const [username, setUsername] = useState('');
+    const [nickName, setNickname] = useState('');
     const [error, setError] = useState('');
 
     const handleLogin = (e) => {
         e.preventDefault();
 
-        if (!username.trim()) {
+        if (!nickName.trim()) {
             setError('Please enter username and password.');
             return;
         }
 
+        const newUser = {
+            nickName: nickName,
+            status: "ONLINE"
+        };
 
-        onLogin();
+        serviceSocket.connect({
+            onConnect: () => {
+                console.log('WebSocket connection successfully established.');
+                onLogin();
+                serviceSocket.addUser(newUser);
+            },
+            onError: (error) => {
+                console.error('Failed to connect to WebSocket:', error);
 
+            }
+        });
     };
 
     return (
@@ -27,8 +41,8 @@ function LoginPage({onLogin}) {
                     <label>Username:</label>
                     <input
                         type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={nickName}
+                        onChange={(e) => setNickname(e.target.value)}
                     />
                 </div>
 

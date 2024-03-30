@@ -27,6 +27,21 @@
     bottom: 2%;
 }
 
+.user-nickname-display {
+    padding: 10px;
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 8px;
+    display: inline-block; /* Adjust as needed */
+    margin-bottom: 20px; /* Space below the user display */
+}
+
+.user-nickname {
+    font-size: 1.2em; /* Larger text */
+    color: #333; /* Dark grey color */
+    margin: 0; /* Remove default margins */
+}
+
+
 ::-webkit-scrollbar {
     width: 12px;
 }

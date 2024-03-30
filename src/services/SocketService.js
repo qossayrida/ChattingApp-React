@@ -1,40 +1,95 @@
 import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import Stomp from 'webstomp-client';
 
+class ServiceSocket {
+    constructor() {
+        this.serverUrl = 'http://localhost:8088/ws';
+        this.stompClient = null;
+        this.user = null;
+        this.subscriptions = {};
+    }
 
-let socket;
-
-export const initializeWebSocket = () => {
-    const socket = new SockJS('http://localhost:8088/ws');
-    const stompClient = Stomp.over(socket);
-    stompClient.debug = null;
-
-    stompClient.connect({}, () => {
-        console.log('Connected to WebSocket');
-        this.setState({ stompClient, connected: true });
-
-        stompClient.subscribe('/user/public', (response) => {
-            const message = JSON.parse(response.body);
-            console.log('Received message from server:', message);
+    connect(callbacks = {}) {
+        const socket = new SockJS(this.serverUrl);
+        this.stompClient = Stomp.over(socket);
+        this.stompClient.connect({}, frame => {
+            console.log('Connected: ' + frame);
+            if (callbacks.onConnect) {
+                callbacks.onConnect();
+            }
+        }, error => {
+            console.error('Connection error: ' + error);
+            if (callbacks.onError) {
+                callbacks.onError(error);
+            }
         });
-    }, (error) => {
-        console.error('Error connecting to WebSocket:', error);
-    });
-};
-
-export const addUser = (user) => {
-    const { stompClient } = this.state;
-    if (stompClient && stompClient.connected) {
-        stompClient.send('/app/user.addUser', {}, JSON.stringify(user));
     }
-};
 
-export const disconnectUser = (user) => {
-    const { stompClient } = this.state;
-    if (stompClient && stompClient.connected) {
-        stompClient.send('/app/user.disconnectUser', {}, JSON.stringify(user));
+    addUser(user) {
+        this.user = user;
+        this.sendMessage('/app/user.addUser', user);
     }
-};
+
+    disconnect() {
+        if (this.stompClient) {
+            this.sendMessage('/app/user.disconnectUser', this.user);
+            this.stompClient.disconnect();
+            console.log("Disconnected");
+        }
+    }
 
 
+    subscribeToUserMessages(callback) {
+        const subscriptionId = `/user/${this.user.nickName}/queue/messages`;
+        console.log(`Subscribing to ${subscriptionId}`);
+        this.subscriptions[subscriptionId] = this.stompClient.subscribe(subscriptionId, message => {
+            callback(JSON.parse(message.body));
+        }, error => {
+            console.error(`Error subscribing to ${subscriptionId}:`, error);
+        });
+    }
 
+
+    unsubscribeFromUserMessages() {
+        const subscriptionId = `/user/${this.user.nickName}/queue/messages`;
+        if (this.subscriptions[subscriptionId]) {
+            this.subscriptions[subscriptionId].unsubscribe();
+            delete this.subscriptions[subscriptionId];
+            console.log(`Unsubscribed from ${subscriptionId}`);
+        }
+    }
+
+    sendMessage(destination, message) {
+        this.stompClient.send(destination, JSON.stringify(message), {});
+    }
+
+    sendChatMessage(chatMessage) {
+        this.sendMessage('/app/chat', chatMessage);
+    }
+
+    async fetchChatHistory(senderId, recipientId) {
+        const response = await fetch(`http://localhost:8088/messages/${senderId}/${recipientId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch chat messages');
+        }
+        return await response.json();
+    }
+
+
+    fetchActiveUsers = async () => {
+        try {
+            const response = await fetch('http://localhost:8088/users');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Failed to fetch active users:", error);
+            return []; // Return an empty array in case of failure
+        }
+    };
+
+}
+
+const serviceSocket = new ServiceSocket();
+export default serviceSocket;

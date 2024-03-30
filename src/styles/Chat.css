@@ -25,3 +25,39 @@
 .send-button {
     width: 80px;
 }
+
+.sub-chat-container {
+    display: flex;
+    height: 85%;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.message {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    max-width: 60%;
+}
+
+.sent {
+    align-self: flex-end;
+    background-color: #007bff;
+}
+
+.received {
+    align-self: flex-start;
+    background-color: #6c757d;
+}
+
+.chat-header {
+    padding: 15px;
+    background: linear-gradient(to right, #1c214d, #404fb2);
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
