@@ -27,12 +27,12 @@ class ServiceSocket {
 
     addUser(user) {
         this.user = user;
-        this.sendMessage('/app/user.addUser', user);
+        this.sendMessage('/app/addUser', user);
     }
 
     disconnect() {
         if (this.stompClient) {
-            this.sendMessage('/app/user.disconnectUser', this.user);
+            this.sendMessage('/app/disconnectUser', this.user);
             this.stompClient.disconnect();
             console.log("Disconnected");
         }
@@ -88,6 +88,27 @@ class ServiceSocket {
             return []; // Return an empty array in case of failure
         }
     };
+
+
+    subscribeToPublic(callback) {
+        const subscriptionId = `/user/public`;
+        console.log(`Subscribing to public`);
+        this.subscriptions[subscriptionId] = this.stompClient.subscribe(subscriptionId, message => {
+            callback(JSON.parse(message.body));
+        }, error => {
+            console.error(`Error subscribing to ${subscriptionId}:`, error);
+        });
+    }
+
+
+    unsubscribeFromPublic() {
+        const subscriptionId = `/user/public`;
+        if (this.subscriptions[subscriptionId]) {
+            this.subscriptions[subscriptionId].unsubscribe();
+            delete this.subscriptions[subscriptionId];
+            console.log(`Unsubscribed from public`);
+        }
+    }
 
 }
 

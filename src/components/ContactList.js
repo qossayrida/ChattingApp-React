@@ -6,7 +6,17 @@ import serviceSocket from '../services/SocketService';
 const ContactList = ({currentUser, onSelectContact }) => {
     const [contacts, setContacts] = useState([]);
 
+
     useEffect(() => {
+        serviceSocket.subscribeToPublic(handleIncomingMessage);
+
+        return () => {
+            serviceSocket.unsubscribeFromPublic();
+        };
+    }, []);
+
+    const handleIncomingMessage = (message) => {
+        console.log("This for debug ----> ",message)
         const loadActiveUsers = async () => {
             const activeUsers = await serviceSocket.fetchActiveUsers();
             const filteredUsers = activeUsers.filter(user => user.nickName !== currentUser);
@@ -14,7 +24,7 @@ const ContactList = ({currentUser, onSelectContact }) => {
         };
 
         loadActiveUsers();
-    },);
+    };
 
     const theContacts = contacts.map((contact, index) => (
         <ListGroup.Item key={index} action onClick={() => onSelectContact(contact)} className="custom-contact-item">

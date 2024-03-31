@@ -21,7 +21,6 @@ function HomePage({onLogout})  {
                         ...chat,
                         sent: chat.senderId === nickName
                     }));
-
                     setContactMessages(prevMessages => {
                         return {
                             ...prevMessages,
