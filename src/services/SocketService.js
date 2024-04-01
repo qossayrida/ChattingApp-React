@@ -64,7 +64,8 @@ class ServiceSocket {
     }
 
     sendChatMessage(chatMessage) {
-        this.sendMessage('/app/chat.sendMessage', chatMessage);
+        //if added sendMessage will send at the kafka
+        this.sendMessage('/app/chat', chatMessage);
     }
 
     async fetchChatHistory(senderId, recipientId) {
