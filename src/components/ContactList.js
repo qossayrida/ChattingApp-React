@@ -9,7 +9,7 @@ const ContactList = ({currentUser, onSelectContact }) => {
 
     useEffect(() => {
         serviceSocket.subscribeToPublic(handleIncomingMessage);
-
+        handleIncomingMessage();
         return () => {
             serviceSocket.unsubscribeFromPublic();
         };
@@ -25,6 +25,8 @@ const ContactList = ({currentUser, onSelectContact }) => {
 
         loadActiveUsers();
     };
+
+
 
     const theContacts = contacts.map((contact, index) => (
         <ListGroup.Item key={index} action onClick={() => onSelectContact(contact)} className="custom-contact-item">

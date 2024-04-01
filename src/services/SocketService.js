@@ -64,7 +64,7 @@ class ServiceSocket {
     }
 
     sendChatMessage(chatMessage) {
-        this.sendMessage('/app/chat', chatMessage);
+        this.sendMessage('/app/chat.sendMessage', chatMessage);
     }
 
     async fetchChatHistory(senderId, recipientId) {
@@ -85,7 +85,7 @@ class ServiceSocket {
             return await response.json();
         } catch (error) {
             console.error("Failed to fetch active users:", error);
-            return []; // Return an empty array in case of failure
+            return [];
         }
     };
 
@@ -96,7 +96,7 @@ class ServiceSocket {
         this.subscriptions[subscriptionId] = this.stompClient.subscribe(subscriptionId, message => {
             callback(JSON.parse(message.body));
         }, error => {
-            console.error(`Error subscribing to ${subscriptionId}:`, error);
+            console.error(`Error subscribing to public`, error);
         });
     }
 
